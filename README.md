@@ -1,4 +1,3 @@
-cat > README.md << EOF
 # Pneumonia X-ray Detector
 
 This project provides a backend service for detecting pneumonia from chest X-ray images using a trained deep learning model.

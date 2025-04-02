@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pneumonia X-ray Detector</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Pneumonia X-ray Detector</h1>
+        <p>Upload a chest X-ray to check for pneumonia.</p>
+    </div>
+
+    <div class="container">
+        <div class="upload-box">
+            <input type="file" id="file-input" accept="image/*" required hidden>
+            <label for="file-input" class="file-label">
+                <img src="static/upload-icon.png" alt="Upload Icon">
+                <p>Click to upload an X-ray image</p>
+            </label>
+            <p id="file-name">No file selected</p>
+        </div>
+
+        <button id="submit-btn">Upload & Predict</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById("file-input").addEventListener("change", function() {
+            const fileName = this.files[0] ? this.files[0].name : "No file selected";
+            document.getElementById("file-name").textContent = fileName;
+        });
+
+        document.getElementById("submit-btn").addEventListener("click", function() {
+            const fileInput = document.getElementById("file-input").files[0];
+
+            if (!fileInput) {
+                alert("Please select an image.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput);
+
+            fetch("/predict", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerHTML = 
+                    `<p><strong>Pneumonia Detected:</strong> ${data.is_pneumonia}</p>
+                     <p><strong>Confidence:</strong> ${data.confidence}</p>`;
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>

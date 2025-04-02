@@ -1,19 +1,25 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from tensorflow.keras.models import load_model
 from PIL import Image
 import numpy as np
 import io
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates", static_folder="static")
 model = load_model("model/pneumonia_model.keras")
 
 def preprocess_image(image_bytes):
-     image = Image.open(io.BytesIO(image_bytes)).convert("RGB")  # 🟢 彩色图像
-     image = image.resize((150, 150))
-     image = np.array(image) / 255.0
-     image = image.reshape(1, 150, 150, 3)                   
-     return image
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    image = image.resize((150, 150))
+    image = np.array(image) / 255.0
+    image = image.reshape(1, 150, 150, 3)
+    return image
 
+# Home route to serve the frontend
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+# API route for prediction
 @app.route("/predict", methods=["POST"])
 def predict():
     if 'file' not in request.files:
@@ -27,7 +33,7 @@ def predict():
     proba = float(prediction[0][0])
     return jsonify({
         "is_pneumonia": "Yes" if proba > 0.5 else "No",
-        "confidence": f"{round(proba * 100, 1)}%"     
+        "confidence": f"{round(proba * 100, 1)}%"
     })
 
 if __name__ == "__main__":

@@ -1,27 +1,5 @@
 
-__pycache__/
-*.py[cod]
-*.pyo
+_
 
 venv/
 .env/
-
-.ipynb_checkpoints/
-*.h5
-*.keras
-*.zip
-*.tar.gz
-*.pth
-*.ckpt
-*.pb
-
-*.jpg
-*.jpeg
-*.png
-
-.DS_Store
-
-.vscode/
-
-*.whl
-pip-wheel-metadata/

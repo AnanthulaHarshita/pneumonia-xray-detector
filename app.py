@@ -35,6 +35,9 @@ def predict():
         "is_pneumonia": "Yes" if proba > 0.5 else "No",
         "confidence": f"{round(proba * 100, 1)}%"
     })
+@app.route('/test')
+def test():
+    return 'Server is working!'
 
 if __name__ == "__main__":
     app.run(debug=True)

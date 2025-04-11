@@ -3,7 +3,7 @@ services:
     name: pneumonia-app
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    startCommand: gunicorn app:app --timeout 120
     repo: https:github.com/AnanthulaHarshita/pneumonia-xray-detector/new/test-sid
     branch: test-sid
     region: oregon
